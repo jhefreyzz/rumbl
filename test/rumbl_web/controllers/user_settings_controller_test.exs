@@ -42,14 +42,14 @@ defmodule RumblWeb.UserSettingsControllerTest do
         put(conn, Routes.user_settings_path(conn, :update_password), %{
           "current_password" => "invalid",
           "user" => %{
-            "password" => "too short",
-            "password_confirmation" => "does not match"
+            "password" => "fail",
+            "password_confirmation" => "short"
           }
         })
 
       response = html_response(old_password_conn, 200)
       assert response =~ "<h1>Settings</h1>"
-      assert response =~ "should be at least 12 character(s)"
+      assert response =~ "should be at least 6 character(s)"
       assert response =~ "does not match password"
       assert response =~ "is not valid"
 
@@ -74,7 +74,7 @@ defmodule RumblWeb.UserSettingsControllerTest do
     test "does not update email on invalid data", %{conn: conn} do
       conn =
         put(conn, Routes.user_settings_path(conn, :update_email), %{
-          "current_password" => "invalid",
+          "current_password" => "short",
           "user" => %{"email" => "with spaces"}
         })
 

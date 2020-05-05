@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="column">
+        <h1><%= @video.title %></h1>
+        <div id="video" data-id="<%= @video.id %>" data-player-id="<%= player_id(@video)%>"></div>
+
+    </div>
+    <div class="column annotations">
+        <h3>Annotations</h3>
+        <div id="message-container"></div>
+        <div>
+            <textarea name="message-input" id="message-input" placeholder="Comment..." rows="3"></textarea>
+            <button id="message-submit" class="button" type="submit">Post</button>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="column">
+        <h3>Users</h3>
+        <ul id="user-list"></ul>
+    </div>
+</div>

@@ -10,6 +10,7 @@ defmodule Rumbl.Accounts.User do
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
 
+    has_many :videos, Rumbl.Multimedia.Video
     timestamps()
   end
 
@@ -24,6 +25,7 @@ defmodule Rumbl.Accounts.User do
   def registration_changeset(user, attrs) do
     user
     |> cast(attrs, [:name, :email, :password])
+    |> validate_required([:name])
     |> validate_email()
     |> validate_password()
   end
@@ -40,7 +42,7 @@ defmodule Rumbl.Accounts.User do
   defp validate_password(changeset) do
     changeset
     |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 80)
+    |> validate_length(:password, min: 6, max: 80)
     # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
     # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")

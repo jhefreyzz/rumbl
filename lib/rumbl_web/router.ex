@@ -66,6 +66,7 @@ defmodule RumblWeb.Router do
     put "/users/settings/update_password", UserSettingsController, :update_password
     put "/users/settings/update_email", UserSettingsController, :update_email
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+    resources "/videos", VideoController, except: [:index, :show]
   end
 
   scope "/", RumblWeb do
@@ -74,5 +75,7 @@ defmodule RumblWeb.Router do
     get "/users/confirm", UserConfirmationController, :new
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :confirm
+    resources "/videos", VideoController, only: [:index, :show]
+    get "/watch/:id", WatchController, :show
   end
 end

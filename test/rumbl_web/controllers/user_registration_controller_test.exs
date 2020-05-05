@@ -25,7 +25,11 @@ defmodule RumblWeb.UserRegistrationControllerTest do
 
       conn =
         post(conn, Routes.user_registration_path(conn, :create), %{
-          "user" => %{"email" => email, "password" => valid_user_password()}
+          "user" => %{
+            "name" => valid_name(),
+            "email" => email,
+            "password" => valid_user_password()
+          }
         })
 
       assert get_session(conn, :user_token)
@@ -42,13 +46,14 @@ defmodule RumblWeb.UserRegistrationControllerTest do
     test "render errors for invalid data", %{conn: conn} do
       conn =
         post(conn, Routes.user_registration_path(conn, :create), %{
-          "user" => %{"email" => "with spaces", "password" => "too short"}
+          "user" => %{"name" => "", "email" => "with spaces", "password" => "short"}
         })
 
       response = html_response(conn, 200)
       assert response =~ "<h1>Register</h1>"
+      assert response =~ "can&#39;t be blank"
       assert response =~ "must have the @ sign and no spaces"
-      assert response =~ "should be at least 12 character"
+      assert response =~ "should be at least 6 character(s)"
     end
   end
 end

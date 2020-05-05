@@ -26,6 +26,7 @@ defmodule RumblWeb.UserAuth do
     conn
     |> renew_session()
     |> put_session(:user_token, token)
+    |> put_user_token(user)
     |> maybe_write_remember_me_cookie(token, params)
     |> redirect(to: user_return_to || signed_in_path(conn))
   end
@@ -81,7 +82,8 @@ defmodule RumblWeb.UserAuth do
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
-    assign(conn, :current_user, user)
+
+    conn |> assign(:current_user, user) |> put_user_token(user)
   end
 
   defp ensure_user_token(conn) do
@@ -136,4 +138,15 @@ defmodule RumblWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: "/"
+
+  defp put_user_token(conn, user) do
+    case user do
+      nil ->
+        conn
+
+      user ->
+        token = Phoenix.Token.sign(conn, "user socket", user.id)
+        assign(conn, :user_token, token)
+    end
+  end
 end
