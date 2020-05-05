@@ -11,17 +11,22 @@ use Mix.Config
 # before starting your production server.
 config :rumbl, RumblWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json",
+  # Needed for Phoenix 1.2 and 1.4. Doesn't hurt for 1.3.
+  http: [port: {:system, "PORT"}],
+  # Without this line, your app will not start the web server!
   server: true,
-  secret_key_base: "${SECRET_KEY_BASE}"
+  secret_key_base: "${SECRET_KEY_BASE}",
+  url: [host: "${APP_NAME}.gigalixirapp.com", port: 443],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  # to bust cache during hot upgrades
+  version: Mix.Project.config()[:version]
 
 config :rumbl, Rumbl.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: "${DATABASE_URL}",
   database: "",
   ssl: true,
-  pool_size: 1
+  pool_size: 2
 
 # Do not print debug messages in production
 config :logger, level: :info
