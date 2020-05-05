@@ -1,6 +1,5 @@
 <section class="phx-hero">
   <h1><%= gettext "Welcome to %{name}!", name: "Rumbl" %></h1>
   <p> Rumbl App </p>
-  <p> App was not converted to umbrella</p>
-  <p>WolframAlpha API was not implemented</p>
+  <p>Basic application to annotation youtube videos based on Programming Phoenix book</p>
 </section>
